@@ -1,0 +1,67 @@
+import math
+
+class GeometryCalculator:
+    def __init__(self):
+        self.shapes = []
+
+    def add_shape(self, shape):
+        if not isinstance(shape, Shape):
+            raise ValueError("Добавляемый объект не является фигурой")
+        self.shapes.append(shape)
+
+    def calculate_areas(self):
+        areas = []
+        for shape in self.shapes:
+            areas.append(shape.calculate_area())
+        return areas
+
+class Shape:
+    def calculate_area(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+
+    def calculate_area(self):
+        if self.radius < 0:
+            raise ValueError("Радиус не может быть отрицательным")
+        return math.pi * self.radius**2
+
+class Triangle(Shape):
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def calculate_area(self):
+        if any(side <= 0 for side in [self.a, self.b, self.c]):
+            raise ValueError("Все стороны треугольника должны быть положительными")
+        s = (self.a + self.b + self.c) / 2
+        area = math.sqrt(s * (s - self.a) * (s - self.b) * (s - self.c))
+        return area
+
+    def is_right_triangle(self):
+        sides = [self.a, self.b, self.c]
+        sides.sort()
+        return sides[0]**2 + sides[1]**2 == sides[2]**2
+
+if __name__ == "__main__":
+    radius = float(input("Введите радиус круга: "))
+    a = float(input("Введите длину первой стороны треугольника: "))
+    b = float(input("Введите длину второй стороны треугольника: "))
+    c = float(input("Введите длину третьей стороны треугольника: "))
+
+    circle = Circle(radius)
+    triangle = Triangle(a, b, c)
+
+    circle_area = circle.calculate_area()
+    triangle_area = triangle.calculate_area()
+
+    print(f"Площадь круга: {circle_area}")
+    print(f"Площадь треугольника: {triangle_area}")
+
+    if isinstance(triangle, Triangle) and triangle.is_right_triangle():
+        print("Треугольник является прямоугольным")
+
+
